@@ -5,6 +5,7 @@ import os
 import torch
 from torch import distributed
 from torch.utils.tensorboard import SummaryWriter
+from sys import exit
 
 from backbones import get_model
 from dataset import get_dataloader
@@ -184,7 +185,7 @@ def main(args):
             train_loader.reset()
 
     if rank == 0:
-        path_module = os.path.join(cfg.output, cfg.savedCheckpoint)
+        path_module = os.path.join(cfg.output, "final_" + cfg.savedCheckpoint)
         torch.save({
           'model_state_dict': backbone.module.state_dict(),
           'opt_state_dict':  opt.state_dict(),
@@ -202,3 +203,4 @@ if __name__ == "__main__":
     parser.add_argument("config", type=str, help="py config file")
     parser.add_argument("--local_rank", type=int, default=0, help="local_rank")
     main(parser.parse_args())
+    exit(0)
