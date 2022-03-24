@@ -185,7 +185,7 @@ def main(args):
             train_loader.reset()
 
     if rank == 0:
-        path_module = os.path.join(cfg.output, "final_" + cfg.savedCheckpoint)
+        path_module = os.path.join(cfg.output, 'final_' + cfg.savedCheckpoint)
         torch.save({
           'model_state_dict': backbone.module.state_dict(),
           'opt_state_dict':  opt.state_dict(),
