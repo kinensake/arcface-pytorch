@@ -63,8 +63,10 @@ def main(args):
 
     if cfg.loss == "arcface":
         margin_loss = ArcFace()
+        print("ArcFace...")
     elif cfg.loss == "cosface":
         margin_loss = CosFace()
+        print("Cosface...")
     else:
         raise
 
