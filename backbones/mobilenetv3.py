@@ -34,7 +34,12 @@ class Linear_block(Module):
         x = self.bn(x)
         return x
 
+    
+class Flatten(Module):
+    def forward(self, input):
+        return input.view(input.size(0), -1)
 
+    
 class GDC(nn.Module):
     def __init__(self, in_c, embedding_size):
         super(GDC, self).__init__()
