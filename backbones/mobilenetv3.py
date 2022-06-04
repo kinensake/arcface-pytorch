@@ -10,25 +10,7 @@ arXiv preprint arXiv:1905.02244.
 
 import torch.nn as nn
 import math
-from torch.nn import Linear, Conv2d, BatchNorm1d, BatchNorm2d, PReLU, Sequential, Module
-
-
-class GDC(nn.Module):
-    def __init__(self, in_c, embedding_size):
-        super(GDC, self).__init__()
-        self.conv_6_dw = Linear_block(
-            in_c, in_c, groups=in_c, kernel=(7, 7), stride=(1, 1), padding=(0, 0)
-        )
-        self.conv_6_flatten = Flatten()
-        self.linear = Linear(in_c, embedding_size, bias=False)
-        self.bn = BatchNorm1d(embedding_size)
-
-    def forward(self, x):
-        x = self.conv_6_dw(x)
-        x = self.conv_6_flatten(x)
-        x = self.linear(x)
-        x = self.bn(x)
-        return x
+from .common import GDC
 
 def _make_divisible(v, divisor, min_value=None):
     """
