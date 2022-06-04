@@ -10,7 +10,49 @@ arXiv preprint arXiv:1905.02244.
 
 import torch.nn as nn
 import math
-from .common import GDC
+from torch.nn import Linear, Conv2d, BatchNorm1d, BatchNorm2d, PReLU, Sequential, Module
+
+
+class Linear_block(Module):
+    def __init__(
+        self, in_c, out_c, kernel=(1, 1), stride=(1, 1), padding=(0, 0), groups=1
+    ):
+        super(Linear_block, self).__init__()
+        self.conv = Conv2d(
+            in_c,
+            out_channels=out_c,
+            kernel_size=kernel,
+            groups=groups,
+            stride=stride,
+            padding=padding,
+            bias=False,
+        )
+        self.bn = BatchNorm2d(out_c)
+
+    def forward(self, x):
+        x = self.conv(x)
+        x = self.bn(x)
+        return x
+
+
+class GDC(nn.Module):
+    def __init__(self, in_c, embedding_size):
+        super(GDC, self).__init__()
+        self.conv_6_dw = Linear_block(
+            in_c, in_c, groups=in_c, kernel=(7, 7), stride=(1, 1), padding=(0, 0)
+        )
+        self.conv_6_flatten = Flatten()
+        self.linear = nn.Linear(in_c, embedding_size, bias=False)
+        # self.bn = BatchNorm1d(embedding_size, affine=False)
+        self.bn = nn.BatchNorm1d(embedding_size)
+
+    def forward(self, x):
+        x = self.conv_6_dw(x)
+        x = self.conv_6_flatten(x)
+        x = self.linear(x)
+        x = self.bn(x)
+        return x
+
 
 def _make_divisible(v, divisor, min_value=None):
     """
