@@ -1,5 +1,6 @@
 from .iresnet import iresnet18, iresnet34, iresnet50, iresnet100, iresnet200
 from .mobilefacenet import get_mbf
+from .mobilenetv3 import get_mb3
 
 
 def get_model(name, **kwargs):
@@ -21,5 +22,8 @@ def get_model(name, **kwargs):
         fp16 = kwargs.get("fp16", False)
         num_features = kwargs.get("num_features", 512)
         return get_mbf(fp16=fp16, num_features=num_features)
+    elif name == "mb3":
+        num_features = kwargs.get("num_features", 512)
+        return get_mb3(num_features)
     else:
         raise ValueError()
